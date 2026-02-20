@@ -743,3 +743,34 @@ fn usage_includes_self_update_commands() {
         .stdout(predicate::str::contains("self update"))
         .stdout(predicate::str::contains("--check"));
 }
+
+// ── Estimate flag ───────────────────────────────────────────────────────────
+
+#[test]
+fn issues_create_help_shows_estimate() {
+    lineark()
+        .args(["issues", "create", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("--estimate"))
+        .stdout(predicate::str::contains("-e"));
+}
+
+#[test]
+fn issues_update_help_shows_estimate() {
+    lineark()
+        .args(["issues", "update", "--help"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("--estimate"))
+        .stdout(predicate::str::contains("-e"));
+}
+
+#[test]
+fn issues_update_no_flags_error_mentions_estimate() {
+    lineark()
+        .args(["--api-token", "fake-token", "issues", "update", "ENG-123"])
+        .assert()
+        .failure()
+        .stderr(predicate::str::contains("--estimate"));
+}
